@@ -2,9 +2,11 @@
 
 The repository is a submission for the Alexa Prize Coding Challenge. Description of the challenge can be found [here](https://rentry.co/alexa-prize-coding-test).
 
-**Submitter:** Rohan Lekhwani
-**Challenge Received:** December 8, 2022
-**Challenge Completed:** December 11, 2022
+```
+Submitter: Rohan Lekhwani
+Challenge Received: December 8, 2022
+Challenge Completed: December 11, 2022
+```
 
 ## Table of Contents
 
@@ -199,7 +201,7 @@ The following are some of the possible improvements that can be made to the mode
 
 ### Model Improvements
 
-- From analysis it is seen that the model accuracy is not very high. This is due to the fact that the model size had to be constrained owing to the 1vCPU and 1GiB memory limit of the free tier EC2 instance. Larger models (like the uncased BERT, and 8 layer Small BERT models) were trained and the accuracy was seen to improve. These models can be found within the [Google Drive](https://drive.google.com/drive/folders/17oGnAMfBkuxeXM_vI4qb3a9DZr2yPuqN?usp=share_link).
+- From analysis it is seen that the model accuracy is not very high. This is due to the fact that the model size had to be constrained (larger models take up more memory to load) owing to the 1vCPU and 1GiB memory limit of the free tier EC2 instance. Larger models (like the uncased BERT, and 8 layer Small BERT models) were trained and the accuracy was seen to improve. These models can be found within the [Google Drive](https://drive.google.com/drive/folders/17oGnAMfBkuxeXM_vI4qb3a9DZr2yPuqN?usp=share_link).
 
 - The model accuracy is seen to improve linearly with the number of epochs. However owing to time constraints the model was trained for only 5 epochs. The model can be trained for more epochs to improve the accuracy.
 

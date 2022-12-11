@@ -28,3 +28,7 @@ INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a
  * Running on http://127.0.0.1:5000
  * Running on http://192.168.0.12:5000
 INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug:127.0.0.1 - - [10/Dec/2022 18:18:27] "[33mGET / HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [10/Dec/2022 18:18:29] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+1/1 [==============================] - ETA: 0s1/1 [==============================] - 5s 5s/step
+INFO:werkzeug:127.0.0.1 - - [10/Dec/2022 18:19:03] "POST /predict HTTP/1.1" 200 -
