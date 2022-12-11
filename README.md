@@ -33,7 +33,7 @@ To transform the text inputs numeric token ids and to arrange them in Tensors be
 
 A customized model has been built upon the pre-trained Small BERT model. It consists of the preprocessing layer, the BERT encoder, dropout layer and a dense layer to predict the classification output. The model summary can be seen below:
 
-```ipynb
+```python
 Model: "model_2"
 __________________________________________________________________________________________________
  Layer (type)                   Output Shape         Param #     Connected to                     
@@ -75,7 +75,7 @@ The CategoricalCrossentropy loss is used since the goal is a non-binary classifi
 
 After the final epoch the following are the metrics obtained with the current model
 
-```ipynb
+```python
 training_loss: 0.7695
 categorical_accuracy: 0.7319
 val_loss: 0.6979
