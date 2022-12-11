@@ -6,6 +6,14 @@ The repository is a submission for the Alexa Prize Coding Challenge. Description
 **Challenge Received:** December 8, 2022
 **Challenge Completed:** December 11, 2022
 
+## How to Run
+
+The URL for the deployed model is: `http://apcc-asg-1-1665300744.us-east-1.elb.amazonaws.com/predict`. Make a `POST` request with the text to be classified within the body.
+
+```bash
+curl -X POST -H "Content-Type: application/json" -d '{"text": "Will I be making my own pasta for this recipe or using the packaged store bought kind?"}' http://apcc-asg-1-1665300744.us-east-1.elb.amazonaws.com/predict
+```
+
 ## Dataset
 
 The [Wizards of Tasks](https://registry.opendata.aws/wizard-of-tasks/) dataset has been used to train an intent classification model. The dataset comprises of two domains: `cooking` and `diy`. During training we only make use of the `text` and `intent` attributes of the samples. The `cooking` and `diy` domains have been combined to create a join dataset.
@@ -96,6 +104,29 @@ A `t2.micro` EC2 instance is started with 1 vCPU and 1GiB memory. The repository
 pip install -r requirements.txt
 ```
 
+A systemd service `apcc.service` is created to run the flask server within `/etc/systemd/system`.
+
+```bash
+[Unit]
+Description=APCC Service
+After=network.target
+
+[Service]
+User=root
+WorkingDirectory=/home/ec2-user/apcc
+ExecStart=/bin/python3 server.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+```
+
+The service is started to verify correct deployment.
+
+```bash
+sudo systemctl start apcc.service
+```
+
 An Amazon Machine Image (AMI) of the instance is created. Doing so enables spinning up ready-to-serve VMs within an autoscaler.
 
 ### Load Balancing, Target Groups and Auto Scaling Groups
@@ -114,8 +145,62 @@ A target group is created for port `5000` for the instances. The Internet-facing
 
 The following is the architecture diagram of the deployment.
 
+![architecture](./architecture.png)
+
 ## Development
+
+Clone the repo and `cd` into the `apcc` directory.
+
+```bash
+git clone git@github.com:RonLek/Alexa-Prize-Coding-Challenge.git
+cd apcc
+```
+
+Download a model to deploy from the [Google Drive](https://drive.google.com/drive/folders/17oGnAMfBkuxeXM_vI4qb3a9DZr2yPuqN?usp=share_link) and place it in the current directory. Make sure to change the name of the model to load in `server.py` correspondingly.
+
+Install the dependencies using `pip` and start the server. If you are low on memory make use of the `--no-cache-dir` flag.
+
+```bash
+sudo pip3 install -r requirements.txt --no-cache-dir
+sudo python3 server.py
+```
+
+> Note: `sudo` is required when serving on `PORT=80`.
+
+The server should be up and running on `PORT=80`. You can test the server by sending a POST request to the server with the following command.
+
+```bash
+curl -X POST -H "Content-Type: application/json" -d '{"text": "Will I be making my own pasta for this recipe or using the packaged store bought kind?"}' http://localhost:80/predict
+```
 
 ## Possible Improvements
 
+The following are some of the possible improvements that can be made to the model and the deployment strategy.
+
+### Model Improvements
+
+- From analysis it is seen that the model accuracy is not very high. This is due to the fact that the model size had to be constrained owing to the 1vCPU and 1GiB memory limit of the free tier EC2 instance. Larger models (like the uncased BERT, and 8 layer Small BERT models) were trained and the accuracy was seen to improve. These models can be found within the [Google Drive](https://drive.google.com/drive/folders/17oGnAMfBkuxeXM_vI4qb3a9DZr2yPuqN?usp=share_link).
+
+- The model accuracy is seen to improve linearly with the number of epochs. However owing to time constraints the model was trained for only 5 epochs. The model can be trained for more epochs to improve the accuracy.
+
+- The current model is a pre-trained BERT model with additional Dense and Dropout layers. A better model is bound to give better results on the dataset.
+
+### Deployment Improvements
+
+- The entire deployment can be containerized on EKS. Helm charts can be used to start a Kubernetes cluster and deploy the application on it. $0.10 per hour is charged for the EKS cluster, however since the challenge required using only free resources this was not done.
+
+- AWS SageMaker could be optionally use to train, test and validate the model along with deploying it for API consumption. SageMaker also handles scaling the resources dedicated to the model to handle increased traffic.
+
+- Currently instances are started in two different zones. This can be extended to all 6 zones to ensure high availability.
+
+- Although healthchecks are in place. Observability and monitoring alerts can be set up to ensure that the application is running smoothly.
+
 ## References
+
+The following papers and resources were used to complete the project.
+
+- Wizard of Tasks: A Novel Conversational Dataset for Solving Real-World Tasks in Conversational Settings by Jason Ingyu Choi, Saar Kuzi, Nikhita Vedula, Jie Zhao, Giuseppe Castellucci, Marcus Collins, Shervin Malmasi, Oleg Rokhlenko and Eugene Agichtein
+
+- Devlin, J., Chang, M.W., Lee, K. and Toutanova, K., 2018. Bert: Pre-training of deep bidirectional transformers for language understanding. arXiv preprint arXiv:1810.04805.
+
+- AWS Documentation
