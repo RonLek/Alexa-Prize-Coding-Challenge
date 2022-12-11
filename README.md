@@ -57,7 +57,7 @@ A few samples have `null` values for `text` or `intent` these have been removed 
 
 ## Model Training
 
-A pre-trained [BERT](https://arxiv.org/abs/1810.04805) model has been used to train on the Wizards of Tasks dataset. [Tensorflow Hub](https://tfhub.dev/google/collections/bert/1) was used to obtain a pre-trained BERT model. More specifically, the deployment makes use of the Small BERT model `small_bert/bert_en_uncased_L-2_H-256_A-4`. This model has 2 hidden layers (transformer blocks), a hidden size of 256 and 4 attention heads. More information about this model can be found [here](https://tfhub.dev/tensorflow/small_bert/bert_en_uncased_L-2_H-256_A-4/2).
+A pre-trained [BERT](https://arxiv.org/abs/1810.04805) model has been used to train on the Wizards of Tasks dataset. [Tensorflow Hub](https://tfhub.dev/google/collections/bert/1) was used to obtain a pre-trained BERT model. More specifically, the deployment makes use of the Small BERT model `small_bert/bert_en_uncased_L-2_H-256_A-4`. This model has 2 hidden layers (transformer blocks), a hidden size of 256 and 4 attention heads. More information about this model can be found [here](https://tfhub.dev/tensorflow/small_bert/bert_en_uncased_L-2_H-256_A-4/2). `intent_classifier.ipynb` contains the model training code.
 
 To transform the text inputs numeric token ids and to arrange them in Tensors before being input to BERT we make use of pre-processing models. TensorFlow Hub provides a matching preprocessing model for each of the BERT models, which implements this transformation using TF ops from the TF.text library.
 
