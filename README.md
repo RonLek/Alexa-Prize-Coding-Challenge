@@ -6,12 +6,32 @@ The repository is a submission for the Alexa Prize Coding Challenge. Description
 **Challenge Received:** December 8, 2022
 **Challenge Completed:** December 11, 2022
 
+## Table of Contents
+
+- [Alexa Prize Coding Challenge](#alexa-prize-coding-challenge)
+  - [Table of Contents](#table-of-contents)
+  - [How to Run](#how-to-run)
+  - [Dataset](#dataset)
+  - [Data Preprocessing](#data-preprocessing)
+  - [Model Training](#model-training)
+    - [Hyperparameters](#hyperparameters)
+    - [Metrics](#metrics)
+  - [Deployment](#deployment)
+    - [Creating an AMI](#creating-an-ami)
+    - [Load Balancing, Target Groups and Auto Scaling Groups](#load-balancing-target-groups-and-auto-scaling-groups)
+  - [Development](#development)
+  - [Possible Improvements](#possible-improvements)
+    - [Model Improvements](#model-improvements)
+    - [Deployment Improvements](#deployment-improvements)
+  - [References](#references)
+
 ## How to Run
 
 The URL for the deployed model is: `http://apcc-asg-1-1665300744.us-east-1.elb.amazonaws.com/predict`. Make a `POST` request with the text to be classified within the body.
 
 ```bash
 curl -X POST -H "Content-Type: application/json" -d '{"text": "Will I be making my own pasta for this recipe or using the packaged store bought kind?"}' http://apcc-asg-1-1665300744.us-east-1.elb.amazonaws.com/predict
+# {"intent":"ask_question_ingredients_tools","score":"0.62276465"}
 ```
 
 ## Dataset
